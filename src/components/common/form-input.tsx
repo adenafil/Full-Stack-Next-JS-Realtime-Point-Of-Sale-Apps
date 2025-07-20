@@ -8,10 +8,10 @@ export default function FormInput<T extends FieldValues>({ form, name, label, pl
     <FormField
       control={form.control}
       name={name}
-      render={(field) => (
+      render={({ field: { ...rest } }) => (
         <FormItem>
           <FormLabel>{label}</FormLabel>
-          <FormControl>{type === "textarea" ? <Textarea {...field} placeholder={placeholder} autoComplete="off" className="resize-none" /> : <Input type={type} placeholder={placeholder} autoComplete="off" />}</FormControl>
+          <FormControl>{type === "textarea" ? <Textarea {...rest} placeholder={placeholder} autoComplete="off" className="resize-none" /> : <Input {...rest} type={type} placeholder={placeholder} autoComplete="off" />}</FormControl>
           <FormMessage className="text-xs" />
         </FormItem>
       )}

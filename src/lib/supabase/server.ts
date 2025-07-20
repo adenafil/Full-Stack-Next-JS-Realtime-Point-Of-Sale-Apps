@@ -6,7 +6,7 @@ type CreateClientOptions = {
     isAdmin?: boolean;
 };
 
-export async function createClient({ isAdmin = false }: CreateClientOptions) {
+export async function createClient({ isAdmin = false }: CreateClientOptions = {}) {
   const cookieStore = await cookies();
 
   return createBrowserClient(environment.SUPABASE_URL!, isAdmin ? environment.SUPABASE_SERVICE_ROLE_KEY! : environment.SUPABASE_ANON_KEY!, {
