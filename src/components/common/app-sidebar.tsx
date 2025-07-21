@@ -8,16 +8,13 @@ import { SIDEBAR_MENU_LIST, SidebarMenuKey } from "@/constants/sidebar-constants
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { signOut } from "@/actions/auth-action";
+import { useAuthStore } from "@/stores/auth-store";
 
 export default function AppSidebar() {
   const { isMobile } = useSidebar();
   const pathname = usePathname();
-  const profile = {
-    name: "Avip Syaifullah",
-    role: "admin",
-    avatar_url: "",
-  };
-
+  const profile = useAuthStore((state) => state.profile);
+  
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -63,12 +60,12 @@ export default function AppSidebar() {
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src="" alt="" />
-                  <AvatarFallback className="rounded-lg">A</AvatarFallback>
+                  <AvatarImage src={profile.avatar_url} alt={profile.name} />
+                  <AvatarFallback className="rounded-lg capitalize">{ profile.name?.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="leading-tight">
-                  <h4 className="truncate font-medium">Avip Syaifullah</h4>
-                  <p className="text-muted-foreground truncate text-xs">Admin</p>
+                  <h4 className="truncate font-medium">{profile.name}</h4>
+                  <p className="text-muted-foreground truncate text-xs capitalize">{profile.role}</p>
                 </div>
                 <EllipsisVertical className="ml-auto size-4" />
               </SidebarMenuButton>
@@ -77,12 +74,12 @@ export default function AppSidebar() {
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5">
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src="" alt="" />
-                    <AvatarFallback className="rounded-lg">A</AvatarFallback>
+                    <AvatarImage src={profile.avatar_url} alt={profile.name} />
+                    <AvatarFallback className="rounded-lg capitalize">{ profile.name?.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div className="leading-tight">
-                    <h4 className="truncate font-medium">Avip Syaifullah</h4>
-                    <p className="text-muted-foreground truncate text-xs">Admin</p>
+                    <h4 className="truncate font-medium">{profile.name}</h4>
+                    <p className="text-muted-foreground truncate text-xs capitalize">{profile.role}</p>
                   </div>
                 </div>
               </DropdownMenuLabel>
