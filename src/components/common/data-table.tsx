@@ -2,6 +2,10 @@ import { ReactNode } from "react";
 import { Card } from "../ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import PaginationDataTable from "./pagination-data-table";
+import { Label } from "../ui/label";
+import { Select, SelectItem, SelectTrigger } from "../ui/select";
+import { SelectContent, SelectGroup, SelectLabel, SelectValue } from "@/components/ui/select";
+import { LIMIT_LIST } from "@/constants/data-table-constant";
 
 export default function DataTable({
   header,
@@ -13,15 +17,15 @@ export default function DataTable({
   onChangePage,
   onChangeLimit,
 }: {
-    header: string[];
-    data: (string | ReactNode)[][];
-    isLoading?: boolean;
-    totalPages: number,
-    currentPage: number,
-    currentLimit: number,
-    onChangePage: (page: number) => void;
-    onChangeLimit: (limit: number) => void;
-  }) {
+  header: string[];
+  data: (string | ReactNode)[][];
+  isLoading?: boolean;
+  totalPages: number;
+  currentPage: number;
+  currentLimit: number;
+  onChangePage: (page: number) => void;
+  onChangeLimit: (limit: number) => void;
+}) {
   return (
     <div className="w-full flex flex-col gap-4">
       <Card className="p-0">
@@ -29,23 +33,23 @@ export default function DataTable({
           <TableHeader className="bg-muted sticky top-0 z-10">
             <TableRow>
               {header.map((column) => (
-                <TableHead key={`th-${column}`} className="px-6 py-3">{column}</TableHead>
+                <TableHead key={`th-${column}`} className="px-6 py-3">
+                  {column}
+                </TableHead>
               ))}
             </TableRow>
           </TableHeader>
 
           <TableBody>
-            {
-              data?.map((row, rowIndex) => (
-                <TableRow key={`tr-${rowIndex}`}>
-                  {row.map((column, columnIndex) => (
-                    <TableCell className="px-6 py-3" key={`tc-${rowIndex}-${columnIndex}`}>
-                      {column}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-              }
+            {data?.map((row, rowIndex) => (
+              <TableRow key={`tr-${rowIndex}`}>
+                {row.map((column, columnIndex) => (
+                  <TableCell className="px-6 py-3" key={`tc-${rowIndex}-${columnIndex}`}>
+                    {column}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
 
             {data?.length === 0 && !isLoading && (
               <TableRow>
@@ -67,14 +71,27 @@ export default function DataTable({
       </Card>
 
       <div className="flex items-center justify-between">
-        <div></div>
+        <div className="flex items-center gap-2">
+          <Label>Limit</Label>
+          <Select value={currentLimit.toString()} onValueChange={(value) => onChangeLimit(Number(value))}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select Limit" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Limit</SelectLabel>
+                {LIMIT_LIST.map((limit) => (
+                  <SelectItem key={limit} value={limit.toString()}>
+                    {limit}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
         {totalPages > 1 && (
           <div className="flex justify-end">
-            <PaginationDataTable
-              totalPages={totalPages}
-              currentPage={currentPage}
-              onChangePage={onChangePage}
-            />
+            <PaginationDataTable totalPages={totalPages} currentPage={currentPage} onChangePage={onChangePage} />
           </div>
         )}
       </div>
